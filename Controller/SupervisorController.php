@@ -83,24 +83,35 @@ class SupervisorController extends Controller
     /**
      * startStopAllProcessesAction
      *
+     * @param Request $request
      * @param string $start 1 to start, 0 to stop it
-     * @param string $key   The key to retrieve a Supervisor object
+     * @param string $key The key to retrieve a Supervisor object
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @throws \Exception
      */
-    public function startStopAllProcessesAction($start, $key)
+    public function startStopAllProcessesAction(Request $request, $start, $key)
     {
         $supervisor = $this->get('supervisor.manager')->getSupervisorByKey($key);
         if (!$supervisor) {
             throw new \Exception('Supervisor not found');
         }
 
+        $processesInfo = true;
         if ($start == "1") {
-            if ($supervisor->startAllProcesses() !== true) {
-                $this->get('session')->getFlashBag()->add('error', 'Erreur lors du lancement de tous processus.');
-            }
+            $processesInfo = $supervisor->startAllProcesses();
         } elseif ($start == "0") {
-            if ($supervisor->stopAllProcesses() !== true) {
-                $this->get('session')->getFlashBag()->add('error', 'Erreur lors de l\'arret de tous les processus.');
-            }
+            $processesInfo = $supervisor->stopAllProcesses();
+        }
+
+        if ($request->isXmlHttpRequest()) {
+            $res = json_encode([
+                'processesInfo' => $processesInfo
+            ]);
+
+            return new Response($res, 200, [
+                'Content-Type' => 'application/json',
+                'Cache-Control' => 'no-store',
+            ]);
         }
 
         return $this->redirect($this->generateUrl('supervisor'));
@@ -245,7 +256,7 @@ class SupervisorController extends Controller
 
         $infos = $process->getProcessInfo();
 
-        if ($request->isXmlHttpRequest()) { 
+        if ($request->isXmlHttpRequest()) {
             $processInfo = [];
             foreach (self::$publicInformations as $public) {
                 $processInfo[$public] = $infos[$public];
@@ -255,9 +266,9 @@ class SupervisorController extends Controller
                 'supervisor'    => $key,
                 'processInfo'   => $processInfo,
                 'controlLink'   => $this->generateUrl('supervisor.process.startStop', [
-                    'key'   => $key, 
-                    'name'  => $name, 
-                    'group' => $group, 
+                    'key'   => $key,
+                    'name'  => $name,
+                    'group' => $group,
                     'start' => ($infos['state'] == 10 || $infos['state'] == 20 ? '0' : '1')
                 ])
             ]);
@@ -308,14 +319,14 @@ class SupervisorController extends Controller
                 'supervisor'    => $key,
                 'processInfo'   => $processInfo,
                 'controlLink'   => $this->generateUrl('supervisor.process.startStop', [
-                    'key'   => $key, 
-                    'name'  => $infos['name'], 
-                    'group' => $infos['group'], 
+                    'key'   => $key,
+                    'name'  => $infos['name'],
+                    'group' => $infos['group'],
                     'start' => ($infos['state'] == 10 || $infos['state'] == 20 ? '0' : '1')
                 ])
             ];
         }
-      
+
         $res = json_encode($processesInfo);
 
         return new Response($res, 200, [
