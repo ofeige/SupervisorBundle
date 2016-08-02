@@ -98,9 +98,9 @@ class SupervisorController extends Controller
 
         $processesInfo = true;
         if ($start == "1") {
-            $processesInfo = $supervisor->startAllProcesses();
+            $processesInfo = $supervisor->startAllProcesses(false);
         } elseif ($start == "0") {
-            $processesInfo = $supervisor->stopAllProcesses();
+            $processesInfo = $supervisor->stopAllProcesses(false);
         }
 
         if ($request->isXmlHttpRequest()) {
