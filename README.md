@@ -42,7 +42,7 @@ public function registerBundles()
 
 ### Step 3: Configure your `config.yml` file
 
-``` php 
+``` php
 # app/config/config.yml
 yz_supervisor:
     default_environment: dev
@@ -64,7 +64,10 @@ yz_supervisor:
                 username: guest
                 password: password
                 port: 9001
+                groups: ['example_site']
 ```
+
+The group option limits access to specific process groups. When no groups are provided, all groups are listed.
 
 # Usage
 
