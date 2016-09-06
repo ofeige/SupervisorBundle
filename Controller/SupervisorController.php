@@ -39,6 +39,7 @@ class SupervisorController extends Controller
     public function startStopProcessAction($start, $key, $name, $group, Request $request)
     {
         $supervisor = $this->get('supervisor.manager')->getSupervisorByKey($key);
+
         if (!$supervisor) {
             throw new \Exception('Supervisor not found');
         }
@@ -56,11 +57,21 @@ class SupervisorController extends Controller
 
         } catch (\Exception $e) {
             $success = false;
-            $this->get('session')->getFlashBag()->add('error', 'Erreur lors de l\'arret du processus.');
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                $this->get('translator')->trans('process.stop.error', array(), 'YZSupervisorBundle')
+            );
         }
 
         if (!$success) {
-            $this->get('session')->getFlashBag()->add('error', 'Erreur lors '.($start == "1" ? 'du lancement' : 'de l\'arret').' du processus.');
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                $this->get('translator')->trans(
+                    ($start == "1" ? 'process.start.error' : 'process.stop.error'),
+                    array(),
+                    'YZSupervisorBundle'
+                )
+            );
         }
 
         if ($request->isXmlHttpRequest()) {
@@ -92,6 +103,7 @@ class SupervisorController extends Controller
     public function startStopAllProcessesAction(Request $request, $start, $key)
     {
         $supervisor = $this->get('supervisor.manager')->getSupervisorByKey($key);
+
         if (!$supervisor) {
             throw new \Exception('Supervisor not found');
         }
@@ -153,7 +165,10 @@ class SupervisorController extends Controller
         }
 
         if ($supervisor->clearLog() !== true) {
-            $this->get('session')->getFlashBag()->add('error', 'Erreur lors de la suppression des logs.');
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                $this->get('translator')->trans('logs.delete.error', array(), 'YZSupervisorBundle')
+            );
         }
 
         return $this->redirect($this->generateUrl('supervisor'));
@@ -227,7 +242,10 @@ class SupervisorController extends Controller
         }
 
         if ($process->clearProcessLogs() !== true) {
-            $this->get('session')->getFlashBag()->add('error', 'Erreur lors de la suppression des logs.');
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                $this->get('translator')->trans('logs.delete.error', array(), 'YZSupervisorBundle')
+            );
         }
 
         return $this->redirect($this->generateUrl('supervisor'));

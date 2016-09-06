@@ -1,0 +1,11 @@
+open.stdout: Ver stdout
+open.stderr: Ver stderr
+refresh: Actualizar
+updating: Actualizando ahora
+logs.view: Ver los logs
+logs.delete: Borrar los logs
+loading: Cargando ...
+stop.all: Para todo
+start.all: Empezar todo
+version.api: Api
+version.supervisor: Version
