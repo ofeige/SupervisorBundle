@@ -1,0 +1,14 @@
+open.stdout: Lire stdout
+open.stderr: Lire stderr
+refresh: Actualiser
+updating: Actualisation en cours
+logs.view: Lire les logs
+logs.delete: Supprimer les logs
+loading: Chargement...
+stop.all: Arrêter tout
+start.all: Démarrer tout
+version.api: Api
+version.supervisor: Version
+process.stop.error: Erreur lors de l'arret du processus.
+process.start.error: Erreur lors du lancement du processus.
+logs.delete.error: Erreur lors de la suppression des logs.

@@ -1,5 +1,7 @@
+{% trans_default_domain 'YZSupervisorBundle' %}
+
 {% if log %}
     {{ log|nl2br }}
 {% else %}
-    {{ "Empty log"|trans }}
+    {{ "log.empty"|trans }}
 {% endif %}
