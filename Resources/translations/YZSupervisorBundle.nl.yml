@@ -1,0 +1,26 @@
+open.stdout: Toon stdout
+open.stderr: Toon stderr
+refresh: Vernieuwen
+updating: Wordt nu vernieuwd
+logs.view: Bekijk logs
+logs.delete: Verwijder logs
+log.empty: Dit logbestand is leeg
+loading: Wordt geladen...
+stop.all: Alles stoppen
+start.all: Alles starten
+start: Start
+stop: Stop
+version.api: Api versie
+version.supervisor: Supervisor versie
+information: Toon informatie
+information.empty: Er is geen informatie beschikbaar
+server.up: UP
+server.down: DOWN
+header.status: Status
+header.process: Proces
+header.actions: Acties
+starting: WORDT GESTART...
+stopping: WORDT GESTOPT...
+process.stop.error: Het proces kon niet worden gestopt.
+process.start.error: Het proces kon niet worden gestart.
+logs.delete.error: De logs konden niet worden verwijderd.
