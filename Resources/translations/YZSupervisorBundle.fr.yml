@@ -4,11 +4,23 @@ refresh: Actualiser
 updating: Actualisation en cours
 logs.view: Lire les logs
 logs.delete: Supprimer les logs
+log.empty: Aucune donnée disponible
 loading: Chargement...
 stop.all: Arrêter tout
 start.all: Démarrer tout
+start: Démarrer
+stop: Arêtter
 version.api: Api
 version.supervisor: Version
+information: Voir les infos
+information.empty: Aucune information disponible
+server.up: UP
+server.down: DOWN
+header.status: État
+header.process: Processus
+header.actions: Actions
+starting: DÉMARRAGE...
+stopping: ARRÊT...
 process.stop.error: Erreur lors de l'arret du processus.
 process.start.error: Erreur lors du lancement du processus.
 logs.delete.error: Erreur lors de la suppression des logs.
