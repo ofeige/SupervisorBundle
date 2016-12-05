@@ -2,8 +2,6 @@
 
 namespace YZ\SupervisorBundle\Manager;
 
-use Supervisor\Supervisor;
-
 /**
  * SupervisorManager
  */
@@ -12,7 +10,7 @@ class SupervisorManager
     /**
      * @var array
      */
-    private $supervisors = array();
+    private $supervisors = [];
 
     /**
      * Constuctor
@@ -22,7 +20,14 @@ class SupervisorManager
     public function __construct(array $supervisorsConfiguration)
     {
         foreach ($supervisorsConfiguration as $serverName => $configuration) {
-            $supervisor = new Supervisor($serverName, $configuration['host'], $configuration['username'], $configuration['password'], $configuration['port']);
+            $supervisor = new GroupRestrictedSupervisor(
+                $serverName,
+                $configuration['host'],
+                $configuration['username'],
+                $configuration['password'],
+                $configuration['port'],
+                $configuration['groups']
+            );
             $this->supervisors[$supervisor->getKey()] = $supervisor;
         }
     }
