@@ -5,8 +5,8 @@ namespace YZ\SupervisorBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use YZ\SupervisorBundle\Manager\SupervisorManager;
-use Zend\Validator\Translator\TranslatorInterface;
 
 /**
  * SupervisorController
