@@ -1,0 +1,26 @@
+open.stdout: stdout anzeigen
+open.stderr: stderr anzeigen
+refresh: aktualisieren
+updating: aktualisiere jetzt
+logs.view: Log-Dateien ansehen
+logs.delete: Log-Dateien löschen
+log.empty: Diese Log-Datei ist leer
+loading: lade...
+stop.all: Stop alles
+start.all: Start alles
+start: Start
+stop: Stop
+version.api: Api version
+version.supervisor: Supervisor version
+information: Information anzeigen
+information.empty: Keine Informationen verfügbar
+server.up: LÄUFT
+server.down: ANGEHALTEN
+header.status: Status
+header.process: Prozesse
+header.actions: Aktionen
+starting: STARTEN...
+stopping: STOPPEN...
+process.stop.error: Der Prozess konnte nicht gestoppt werden.
+process.start.error: Der Prozess konnte nicht gestartet werden.
+logs.delete.error: Die Log-Dateien konnten nicht gelöscht werden.
