@@ -5,6 +5,8 @@ namespace YZ\SupervisorBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use YZ\SupervisorBundle\Manager\SupervisorManager;
+use Zend\Validator\Translator\TranslatorInterface;
 
 /**
  * SupervisorController
@@ -13,15 +15,22 @@ class SupervisorController extends AbstractController
 {
     private static $publicInformations = ['description', 'group', 'name', 'state', 'statename'];
 
+    private $supervisorManager;
+    private $translator;
+
+    public function __construct(SupervisorManager $supervisorManager, TranslatorInterface $translator)
+    {
+        $this->supervisorManager = $supervisorManager;
+        $this->translator = $translator;
+    }
+
     /**
      * indexAction
      */
     public function indexAction()
     {
-        $supervisorManager = $this->get('supervisor.manager');
-
         return $this->render('@YZSupervisor/Supervisor/list.html.twig', array(
-            'supervisors' => $supervisorManager->getSupervisors(),
+            'supervisors' => $this->supervisorManager->getSupervisors(),
         ));
     }
 
@@ -39,7 +48,7 @@ class SupervisorController extends AbstractController
      */
     public function startStopProcessAction($start, $key, $name, $group, Request $request)
     {
-        $supervisor = $this->get('supervisor.manager')->getSupervisorByKey($key);
+        $supervisor = $this->supervisorManager->getSupervisorByKey($key);
 
         if (!$supervisor) {
             throw new \Exception('Supervisor not found');
@@ -60,14 +69,14 @@ class SupervisorController extends AbstractController
             $success = false;
             $this->get('session')->getFlashBag()->add(
                 'error',
-                $this->get('translator')->trans('process.stop.error', array(), 'YZSupervisorBundle')
+                $this->translator->trans('process.stop.error', array(), 'YZSupervisorBundle')
             );
         }
 
         if (!$success) {
             $this->get('session')->getFlashBag()->add(
                 'error',
-                $this->get('translator')->trans(
+                $this->translator->trans(
                     ($start == "1" ? 'process.start.error' : 'process.stop.error'),
                     array(),
                     'YZSupervisorBundle'
@@ -103,7 +112,7 @@ class SupervisorController extends AbstractController
      */
     public function startStopAllProcessesAction(Request $request, $start, $key)
     {
-        $supervisor = $this->get('supervisor.manager')->getSupervisorByKey($key);
+        $supervisor = $this->supervisorManager->getSupervisorByKey($key);
 
         if (!$supervisor) {
             throw new \Exception('Supervisor not found');
@@ -139,8 +148,7 @@ class SupervisorController extends AbstractController
      */
     public function showSupervisorLogAction($key)
     {
-        $supervisorManager = $this->get('supervisor.manager');
-        $supervisor = $supervisorManager->getSupervisorByKey($key);
+        $supervisor = $this->supervisorManager->getSupervisorByKey($key);
 
         if (!$supervisor) {
             throw new \Exception('Supervisor not found');
@@ -162,8 +170,7 @@ class SupervisorController extends AbstractController
      */
     public function clearSupervisorLogAction($key)
     {
-        $supervisorManager = $this->get('supervisor.manager');
-        $supervisor = $supervisorManager->getSupervisorByKey($key);
+        $supervisor = $this->supervisorManager->getSupervisorByKey($key);
 
         if (!$supervisor) {
             throw new \Exception('Supervisor not found');
@@ -172,7 +179,7 @@ class SupervisorController extends AbstractController
         if ($supervisor->clearLog() !== true) {
             $this->get('session')->getFlashBag()->add(
                 'error',
-                $this->get('translator')->trans('logs.delete.error', array(), 'YZSupervisorBundle')
+                $this->translator->trans('logs.delete.error', array(), 'YZSupervisorBundle')
             );
         }
 
@@ -190,8 +197,7 @@ class SupervisorController extends AbstractController
      */
     public function showProcessLogAction($key, $name, $group)
     {
-        $supervisorManager = $this->get('supervisor.manager');
-        $supervisor = $supervisorManager->getSupervisorByKey($key);
+        $supervisor = $this->supervisorManager->getSupervisorByKey($key);
         $process = $supervisor->getProcessByNameAndGroup($name, $group);
 
         if (!$supervisor) {
@@ -217,8 +223,7 @@ class SupervisorController extends AbstractController
      */
     public function showProcessLogErrAction($key, $name, $group)
     {
-        $supervisorManager = $this->get('supervisor.manager');
-        $supervisor = $supervisorManager->getSupervisorByKey($key);
+        $supervisor = $this->supervisorManager->getSupervisorByKey($key);
         $process = $supervisor->getProcessByNameAndGroup($name, $group);
 
         if (!$supervisor) {
@@ -244,8 +249,7 @@ class SupervisorController extends AbstractController
      */
     public function clearProcessLogAction($key, $name, $group)
     {
-        $supervisorManager = $this->get('supervisor.manager');
-        $supervisor = $supervisorManager->getSupervisorByKey($key);
+        $supervisor = $this->supervisorManager->getSupervisorByKey($key);
         $process = $supervisor->getProcessByNameAndGroup($name, $group);
 
         if (!$supervisor) {
@@ -255,7 +259,7 @@ class SupervisorController extends AbstractController
         if ($process->clearProcessLogs() !== true) {
             $this->get('session')->getFlashBag()->add(
                 'error',
-                $this->get('translator')->trans('logs.delete.error', array(), 'YZSupervisorBundle')
+                $this->translator->trans('logs.delete.error', array(), 'YZSupervisorBundle')
             );
         }
 
@@ -275,8 +279,7 @@ class SupervisorController extends AbstractController
      */
     public function showProcessInfoAction($key, $name, $group, Request $request)
     {
-        $supervisorManager = $this->get('supervisor.manager');
-        $supervisor = $supervisorManager->getSupervisorByKey($key);
+        $supervisor = $this->supervisorManager->getSupervisorByKey($key);
         $process = $supervisor->getProcessByNameAndGroup($name, $group);
 
         if (!$supervisor) {
@@ -328,8 +331,7 @@ class SupervisorController extends AbstractController
             throw new \Exception('Ajax request expected here');
         }
 
-        $supervisorManager = $this->get('supervisor.manager');
-        $supervisor = $supervisorManager->getSupervisorByKey($key);
+        $supervisor = $this->supervisorManager->getSupervisorByKey($key);
 
         if (!$supervisor) {
             throw new \Exception('Supervisor not found');
