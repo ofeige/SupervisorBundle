@@ -2,16 +2,17 @@
 
 namespace YZ\SupervisorBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * SupervisorController
  */
-class SupervisorController extends Controller
+class SupervisorController extends AbstractController
 {
     private static $publicInformations = ['description', 'group', 'name', 'state', 'statename'];
+
     /**
      * indexAction
      */
@@ -19,7 +20,7 @@ class SupervisorController extends Controller
     {
         $supervisorManager = $this->get('supervisor.manager');
 
-        return $this->render('YZSupervisorBundle:Supervisor:list.html.twig', array(
+        return $this->render('@YZSupervisor/Supervisor/list.html.twig', array(
             'supervisors' => $supervisorManager->getSupervisors(),
         ));
     }
@@ -33,7 +34,7 @@ class SupervisorController extends Controller
      * @param string  $group The group of a process
      * @param Request $request
      *
-     * @return Symfony\Component\HttpFoundation\Response represents an HTTP response.
+     * @return Response
      * @throws \Exception
      */
     public function startStopProcessAction($start, $key, $name, $group, Request $request)
@@ -97,7 +98,7 @@ class SupervisorController extends Controller
      * @param Request $request
      * @param string $start 1 to start, 0 to stop it
      * @param string $key The key to retrieve a Supervisor object
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @return Response
      * @throws \Exception
      */
     public function startStopAllProcessesAction(Request $request, $start, $key)
@@ -133,6 +134,8 @@ class SupervisorController extends Controller
      * showSupervisorLogAction
      *
      * @param string $key The key to retrieve a Supervisor object
+     * @return Response
+     * @throws \Exception
      */
     public function showSupervisorLogAction($key)
     {
@@ -145,7 +148,7 @@ class SupervisorController extends Controller
 
         $logs = $supervisor->readLog(0, 0);
 
-        return $this->render('YZSupervisorBundle:Supervisor:showLog.html.twig', array(
+        return $this->render('@YZSupervisor/Supervisor/showLog.html.twig', array(
             'log' => $logs,
         ));
     }
@@ -154,6 +157,8 @@ class SupervisorController extends Controller
      * clearSupervisorLogAction
      *
      * @param string $key The key to retrieve a Supervisor object
+     * @return Response
+     * @throws \Exception
      */
     public function clearSupervisorLogAction($key)
     {
@@ -180,6 +185,8 @@ class SupervisorController extends Controller
      * @param string $key   The key to retrieve a Supervisor object
      * @param string $name  The name of a process
      * @param string $group The group of a process
+     * @return Response
+     * @throws \Exception
      */
     public function showProcessLogAction($key, $name, $group)
     {
@@ -194,7 +201,7 @@ class SupervisorController extends Controller
         $result = $process->tailProcessStdoutLog(0, 1);
         $stdout = $process->tailProcessStdoutLog(0, $result[1]);
 
-        return $this->render('YZSupervisorBundle:Supervisor:showLog.html.twig', array(
+        return $this->render('@YZSupervisor/Supervisor/showLog.html.twig', array(
             'log' => $stdout[0],
         ));
     }
@@ -205,6 +212,8 @@ class SupervisorController extends Controller
      * @param string $key   The key to retrieve a Supervisor object
      * @param string $name  The name of a process
      * @param string $group The group of a process
+     * @return Response
+     * @throws \Exception
      */
     public function showProcessLogErrAction($key, $name, $group)
     {
@@ -219,7 +228,7 @@ class SupervisorController extends Controller
         $result = $process->tailProcessStderrLog(0, 1);
         $stderr = $process->tailProcessStderrLog(0, $result[1]);
 
-        return $this->render('YZSupervisorBundle:Supervisor:showLog.html.twig', array(
+        return $this->render('@YZSupervisor/Supervisor/showLog.html.twig', array(
             'log' => $stderr[0],
         ));
     }
@@ -230,6 +239,8 @@ class SupervisorController extends Controller
      * @param string $key   The key to retrieve a Supervisor object
      * @param string $name  The name of a process
      * @param string $group The group of a process
+     * @return Response
+     * @throws \Exception
      */
     public function clearProcessLogAction($key, $name, $group)
     {
@@ -259,7 +270,7 @@ class SupervisorController extends Controller
      * @param string  $group The group of a process
      * @param Request $request
      *
-     * @return Symfony\Component\HttpFoundation\Response represents an HTTP response.
+     * @return Response
      * @throws \Exception
      */
     public function showProcessInfoAction($key, $name, $group, Request $request)
@@ -297,7 +308,7 @@ class SupervisorController extends Controller
             ]);
         }
 
-        return $this->render('YZSupervisorBundle:Supervisor:showInformations.html.twig', array(
+        return $this->render('@YZSupervisor/Supervisor/showInformations.html.twig', array(
             'informations' => $infos,
         ));
     }
@@ -308,7 +319,7 @@ class SupervisorController extends Controller
      * @param string  $key The key to retrieve a Supervisor object
      * @param Request $request
      *
-     * @return Symfony\Component\HttpFoundation\Response represents an HTTP response.
+     * @return Response
      * @throws \Exception
      */
     public function showProcessInfoAllAction($key, Request $request)
