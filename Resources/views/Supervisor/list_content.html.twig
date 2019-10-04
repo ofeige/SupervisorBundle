@@ -7,8 +7,7 @@
             {% for supervisor in supervisors %}
                 <li class="nav-item" >
                     <a class="nav-link{{ loop.index == 1 ? ' active' : '' }}" href="#{{ supervisor.name }}">
-                        <span class="label label-{% if supervisor.checkConnection == true %}success{% else %}danger{% endif %}">{% if supervisor.checkConnection == true %}{{ 'server.up'|trans }}{% else %}{{ 'server.down'|trans }}{% endif %}</span>
-                        {% if supervisor.checkConnection == true %}{{ supervisor.getIdentification }}{% else %}{{ supervisor.name }}{% endif %}
+                        {{ supervisor.name }} - <span class="label label-{% if supervisor.checkConnection == true %}success{% else %}danger{% endif %}">{% if supervisor.checkConnection == true %}{{ 'server.up'|trans }}{% else %}{{ 'server.down'|trans }}{% endif %}</span>
                     </a>
                 </li>
             {% endfor %}
