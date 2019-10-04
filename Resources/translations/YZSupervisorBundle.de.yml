@@ -14,8 +14,8 @@ version.api: Api version
 version.supervisor: Supervisor version
 information: Information anzeigen
 information.empty: Keine Informationen verfügbar
-server.up: LÄUFT
-server.down: ANGEHALTEN
+server.up: (server läuft)
+server.down: (server nicht da)
 header.status: Status
 header.process: Prozesse
 header.actions: Aktionen
