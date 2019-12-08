@@ -18,9 +18,9 @@
         "php": ">=7.1.0",
         "yzalis/supervisor": ">=1.1.0",
         "symfony/flex": "^1.3.1",
-        "symfony/framework-bundle": "4.3.*",
+        "symfony/framework-bundle": "^4.1",
         "ext-json": "^1.7",
-        "symfony/translation": "4.3.*"
+        "symfony/translation": "^4.1"
     },
     "autoload": {
         "psr-0": { "YZ\\SupervisorBundle": "" }
