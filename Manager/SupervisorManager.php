@@ -2,42 +2,36 @@
 
 namespace YZ\SupervisorBundle\Manager;
 
-/**
- * SupervisorManager
- */
 class SupervisorManager
 {
     /**
-     * @var array
+     * @var GroupRestrictedSupervisor[]
      */
     private $supervisors = [];
 
     /**
      * Constuctor
      *
-     * @param array $supervisorsConfiguration Configuration in the symfony parameters
+     * @param GroupRestrictedSupervisor[] $supervisors Configuration in the symfony parameters
      */
-    public function __construct(array $supervisorsConfiguration)
+    public function __construct(array $supervisors)
     {
-        foreach ($supervisorsConfiguration as $serverName => $configuration) {
-            $supervisor = new GroupRestrictedSupervisor(
-                $serverName,
-                $configuration['host'],
-                $configuration['username'],
-                $configuration['password'],
-                $configuration['port'],
-                $configuration['groups']
-            );
-            $this->supervisors[$supervisor->getKey()] = $supervisor;
+        foreach ($supervisors as $supervisor) {
+            $this->addSupervisor($supervisor);
         }
+    }
+
+    private function addSupervisor(GroupRestrictedSupervisor $supervisor): void
+    {
+        $this->supervisors[$supervisor->getKey()] = $supervisor;
     }
 
     /**
      * Get all supervisors
      *
-     * @return Supervisor[]
+     * @return GroupRestrictedSupervisor[]
      */
-    public function getSupervisors()
+    public function getSupervisors(): array
     {
         return $this->supervisors;
     }
@@ -47,9 +41,9 @@ class SupervisorManager
      *
      * @param string $key
      *
-     * @return Supervisor|null
+     * @return GroupRestrictedSupervisor|null
      */
-    public function getSupervisorByKey($key)
+    public function getSupervisorByKey(string $key): ?GroupRestrictedSupervisor
     {
         if (isset($this->supervisors[$key])) {
             return $this->supervisors[$key];

@@ -4,7 +4,7 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <service id="supervisor.manager" class="YZ\SupervisorBundle\Manager\SupervisorManager">
-            <argument>%supervisor.servers%</argument>
+            <argument>[]</argument>
         </service>
     </services>
 </container>
