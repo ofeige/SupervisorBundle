@@ -2,45 +2,94 @@
 
 namespace YZ\SupervisorBundle\Manager;
 
+use Supervisor\Exception\SupervisorException;
 use Supervisor\Supervisor;
 
 /**
  * GroupRestrictedSupervisor.
  */
-class GroupRestrictedSupervisor extends Supervisor
+class GroupRestrictedSupervisor
 {
     /**
-     * @var array
+     * @var string[]
      */
     protected $groups;
 
     /**
+     * @var string
+     */
+    protected $name;
+
+    /**
+     * @var string
+     */
+    protected $key;
+
+    /**
+     * @var Supervisor
+     */
+    protected $supervisor;
+
+    /**
      * The constructor.
      *
+     * @param Supervisor $supervisor
      * @param string $name
-     * @param string $ipAddress The server ip adress
-     * @param string $username  Default set to null
-     * @param string $password  Default set to null
-     * @param int    $port      Default set to null
-     * @param array  $groups    Groups to limit this supervisor to
+     * @param string $key
+     * @param array<int, string>  $groups    Groups to limit this supervisor to
      */
-    public function __construct($name, $ipAddress, $username = null, $password = null, $port = null, $groups = [])
+    public function __construct(Supervisor $supervisor, string $name, string $key, array $groups = [])
     {
+        $this->supervisor = $supervisor;
         $this->groups = array_filter($groups);
+        $this->key = $key;
+        $this->name = $name;
+    }
 
-        parent::__construct($name, $ipAddress, $username, $password, $port);
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getKey(): string
+    {
+        return $this->key;
     }
 
     /**
      * getProcesses.
      *
-     * @param array $groups Only show processes in these process groups.
+     * @param array<int, string> $groups Only show processes in these process groups.
      *
-     * @return Process[]
+     * @return SupervisorProcess[]
      */
-    public function getProcesses($groups = [])
+    public function getProcesses($groups = []): array
     {
-        return parent::getProcesses(empty($groups) ? $this->groups : $groups);
+        $processes = [];
+        $groups = $groups ?: $this->groups;
+
+        $result = $this->supervisor->getAllProcessInfo();
+        foreach ($result as $cnt => $process) {
+            // Skip process when process group not listed in $groups
+            if (!empty($groups) && !in_array($process['group'], $groups)) {
+                continue;
+            }
+
+            $processes[$cnt] = $this->getProcessByNameAndGroup($process['name'], $process['group']);
+        }
+
+        return $processes;
+    }
+
+    public function getProcessByNameAndGroup(string $name, string $group): SupervisorProcess
+    {
+        return new SupervisorProcess($name, $group, $this->supervisor);
     }
 
     /**
@@ -48,18 +97,18 @@ class GroupRestrictedSupervisor extends Supervisor
      *
      * @param bool $wait Wait for each process to be fully started
      *
-     * @return array result An array containing start statuses
+     * @return array<int, bool> result An array containing start statuses
      */
-    public function startAllProcesses($wait = true)
+    public function startAllProcesses($wait = true): array
     {
         if (empty($this->groups)) {
-            return parent::startAllProcesses($wait);
+            return [$this->supervisor->startAllProcesses($wait)];
         }
 
         $results = [];
 
         foreach ($this->groups as $group) {
-            $results = array_merge($results, parent::startProcessGroup($group, $wait));
+            $results = array_merge($results, $this->supervisor->startProcessGroup($group, $wait));
         }
 
         return $results;
@@ -70,20 +119,51 @@ class GroupRestrictedSupervisor extends Supervisor
      *
      * @param bool $wait Wait for each process to be fully stoped
      *
-     * @return array result An array containing start statuses
+     * @return array<int, bool> result An array containing start statuses
      */
     public function stopAllProcesses($wait = true)
     {
         if (empty($this->groups)) {
-            return parent::stopAllProcesses($wait);
+            return [$this->supervisor->stopAllProcesses($wait)];
         }
 
         $results = [];
 
         foreach ($this->groups as $group) {
-            $results = array_merge($results, parent::stopProcessGroup($group, $wait));
+            $results = array_merge($results, $this->supervisor->stopProcessGroup($group, $wait));
         }
 
         return $results;
+    }
+
+    public function checkConnection(): bool
+    {
+        try {
+            $this->supervisor->getState();
+
+            return true;
+        } catch (SupervisorException $e) {
+            return false;
+        }
+    }
+
+    public function getSupervisorVersion(): string
+    {
+        return $this->supervisor->getSupervisorVersion();
+    }
+
+    public function getAPIVersion(): string
+    {
+        return $this->supervisor->getAPIVersion();
+    }
+
+    public function readLog(int $offset, int $limit): string
+    {
+        return $this->supervisor->readLog($offset, $limit);
+    }
+
+    public function clearLog(): bool
+    {
+        return $this->supervisor->clearLog();
     }
 }
