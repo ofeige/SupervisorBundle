@@ -39,7 +39,7 @@ class YZSupervisorExtension extends Extension
             $clientId = sprintf('supervisor.http_client.%s', $name);
             $container->register($clientId, \fXmlRpc\Client::class)
                 ->setFactory([new Reference(HttpClientFactory::class), 'createClient'])
-                ->setArguments([$config['host'], $config['port'], $config['username'], $config['password']]);
+                ->setArguments([$config['host'], $config['port'], (string) $config['username'], (string) $config['password']]);
 
             $supervisorId = sprintf('supervisor.service.%s', $name);
             $container->register($supervisorId, Supervisor::class)

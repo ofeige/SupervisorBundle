@@ -10,13 +10,25 @@ use Supervisor\Supervisor;
  */
 class GroupRestrictedSupervisor
 {
-    protected array $groups;
+    /**
+     * @var string[]
+     */
+    protected $groups;
 
-    protected string $name;
+    /**
+     * @var string
+     */
+    protected $name;
 
-    protected string $key;
+    /**
+     * @var string
+     */
+    protected $key;
 
-    protected Supervisor $supervisor;
+    /**
+     * @var Supervisor
+     */
+    protected $supervisor;
 
     /**
      * The constructor.

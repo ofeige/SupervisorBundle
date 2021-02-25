@@ -13,8 +13,11 @@ class SupervisorProcess
      * @var string
      */
     protected $processGroup;
-    
-    protected Supervisor $supervisor;
+
+    /**
+     * @var Supervisor
+     */
+    protected $supervisor;
 
     /**
      * The constructor
@@ -22,7 +25,7 @@ class SupervisorProcess
      * @param string $processName  Name of the process (used to retrieve info)
      * @param string $processGroup Name of the process group
      */
-    public function __construct($processName, $processGroup, Supervisor $supervisor)
+    public function __construct(string $processName, string $processGroup, Supervisor $supervisor)
     {
         $this->processName = $processName;
         $this->processGroup = $processGroup;
@@ -33,7 +36,7 @@ class SupervisorProcess
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->processName;
     }
@@ -42,7 +45,7 @@ class SupervisorProcess
      *
      *  @return string
      */
-    public function getGroup()
+    public function getGroup(): string
     {
         return $this->processGroup;
     }
