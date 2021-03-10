@@ -6,5 +6,5 @@ services:
 
   supervisor.manager:
     class: YZ\SupervisorBundle\Manager\SupervisorManager
-    arguments: ['%supervisor.servers%']
+    arguments: [[]]
     public: true

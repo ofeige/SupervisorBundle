@@ -2,6 +2,7 @@
 
 namespace YZ\SupervisorBundle\Controller;
 
+use YZ\SupervisorBundle\Manager\SupervisorManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,6 +13,15 @@ use Symfony\Component\HttpFoundation\Response;
 class SupervisorController extends Controller
 {
     private static $publicInformations = ['description', 'group', 'name', 'state', 'statename'];
+
+    private $supervisorManager;
+    private $translator;
+
+    public function __construct(SupervisorManager $supervisorManager)
+    {
+        $this->supervisorManager = $supervisorManager;
+    }
+
     /**
      * indexAction
      */
@@ -21,7 +31,7 @@ class SupervisorController extends Controller
         $processGroups = [];
         $supervisorProcesses = [];
 
-        $supervisorManager = $this->get('supervisor.manager');
+        $supervisorManager = $this->supervisorManager;
         $supervisorSupervisors = $supervisorManager->getSupervisors();
         $supervisorKeys = array_keys($supervisorSupervisors);
 
