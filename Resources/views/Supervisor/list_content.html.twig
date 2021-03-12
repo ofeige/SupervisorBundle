@@ -51,10 +51,10 @@
                                 <a href="{{ path('supervisor.process.info', { 'key':supervisor.key, 'name':process.name, 'group':process.group }) }}" class="fancybox_preview fancybox.iframe btn btn-default btn-small process-info {{ process.group }}">{{ "information"|trans }}</a>
                                 <button data-toggle="dropdown" class="btn btn-default btn-small dropdown-toggle"><span class="caret"></span></button>
                                 <ul class="dropdown-menu align-left">
-                                    <li><a href="{{ path('supervisor.process.log', { 'key':supervisor.key, 'name':process.name, 'group':process.group }) }}" class="fancybox_preview fancybox.iframe">{{ "open.stdout"|trans }}</a></li>
-                                    <li><a href="{{ path('supervisor.process.error', { 'key':supervisor.key, 'name':process.name, 'group':process.group }) }}" class="fancybox_preview fancybox.iframe">{{ "open.stderr"|trans }}</a></li>
+                                    <li><a href="{{ path('supervisor.process.log', { 'key':supervisor.key, 'name':process.name, 'group':process.group }) }}" class="fancybox_preview fancybox.iframe form-select btn-small btn-default btn">{{ "open.stdout"|trans }}</a></li>
+                                    <li><a href="{{ path('supervisor.process.error', { 'key':supervisor.key, 'name':process.name, 'group':process.group }) }}" class="fancybox_preview fancybox.iframe form-select btn-small btn-default btn">{{ "open.stderr"|trans }}</a></li>
                                     <li class="divider"></li>
-                                    <li><a href="{{ path('supervisor.process.log.clear', { 'key': supervisor.key, 'name': process.name, 'group': process.group }) }}">{{ "logs.delete"|trans }}</a></li>
+                                    <li><a href="{{ path('supervisor.process.log.clear', { 'key': supervisor.key, 'name': process.name, 'group': process.group }) }}" class="form-select btn-small btn-default btn">{{ "logs.delete"|trans }}</a></li>
                                 </ul>
                             </div>
                         </td>
@@ -86,8 +86,6 @@
             {% for supervisor in supervisors %}
                 <li class="{{ loop.index == 1 ? 'active' : '' }}">
                     <a href="#{{ supervisor.name }}">
-                        <span class="label label-{% if supervisor.checkConnection == true %}success{% else %}danger{% endif %}">{% if supervisor.checkConnection == true %}{{ 'server.up'|trans }}{% else %}{{ 'server.down'|trans }}{% endif %}</span>
-                        {% if supervisor.checkConnection == true %}{{ supervisor.getIdentification }}{% else %}{{ supervisor.name }}{% endif %}
                     </a>
                 </li>
             {% endfor %}
@@ -124,7 +122,7 @@
                                         {% endif %}
                                     </div>
 
-                                    <div class="btn-group">
+                                    <div class="btn-group form-select btn-small btn-default">
                                         <a href="{{ path('supervisor.process.info', { 'key':supervisor.key, 'name':process.name, 'group':process.group }) }}" class="fancybox_preview fancybox.iframe btn btn-default btn-small process-info {{ process.group }}">{{ "information"|trans }}</a>
                                         <button data-toggle="dropdown" class="btn btn-default btn-small dropdown-toggle"><span class="caret"></span></button>
                                         <ul class="dropdown-menu align-left">
