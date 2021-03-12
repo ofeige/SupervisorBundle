@@ -32,7 +32,7 @@
                     {% set processInfos = process.processInfo %}
                     <tr class="{% if processInfos.state == 10 or  processInfos.state == 20 %}success{% else %}danger{% endif %} process selected" data-select data-name="{{ process.name }}" data-group="{{ process.group }}" data-started="{% if processInfos.state == 10 or  processInfos.state == 20 %}true{% else %}false{% endif %}">
                         <td class="col-lg-2">
-                            <span class="label label-{% if processInfos.state == 10 or processInfos.state == 20 %}success{% else %}danger{% endif %} process-statename">{{ processInfos.statename }}</span>
+                            <span class="badge badge-{% if processInfos.state == 10 or processInfos.state == 20 %}success{% else %}danger{% endif %} process-statename">{{ processInfos.statename }}</span>
                         </td>
                         <td class="col-lg-6">
                             <strong class="process-name">{{ processInfos.name }}</strong><br />
@@ -50,11 +50,11 @@
                             <div class="btn-group">
                                 <a href="{{ path('supervisor.process.info', { 'key':supervisor.key, 'name':process.name, 'group':process.group }) }}" class="fancybox_preview fancybox.iframe btn btn-default btn-small process-info {{ process.group }}">{{ "information"|trans }}</a>
                                 <button data-toggle="dropdown" class="btn btn-default btn-small dropdown-toggle"><span class="caret"></span></button>
-                                <ul class="dropdown-menu align-left">
-                                    <li><a href="{{ path('supervisor.process.log', { 'key':supervisor.key, 'name':process.name, 'group':process.group }) }}" class="fancybox_preview fancybox.iframe form-select btn-small btn-default btn">{{ "open.stdout"|trans }}</a></li>
-                                    <li><a href="{{ path('supervisor.process.error', { 'key':supervisor.key, 'name':process.name, 'group':process.group }) }}" class="fancybox_preview fancybox.iframe form-select btn-small btn-default btn">{{ "open.stderr"|trans }}</a></li>
+                                <ul class="dropdown-menu align-left btn btn-small btn-default">
+                                    <li><a href="{{ path('supervisor.process.log', { 'key':supervisor.key, 'name':process.name, 'group':process.group }) }}">{{ "open.stdout"|trans }}</a></li>
+                                    <li><a href="{{ path('supervisor.process.error', { 'key':supervisor.key, 'name':process.name, 'group':process.group }) }}">{{ "open.stderr"|trans }}</a></li>
                                     <li class="divider"></li>
-                                    <li><a href="{{ path('supervisor.process.log.clear', { 'key': supervisor.key, 'name': process.name, 'group': process.group }) }}" class="form-select btn-small btn-default btn">{{ "logs.delete"|trans }}</a></li>
+                                    <li><a href="{{ path('supervisor.process.log.clear', { 'key': supervisor.key, 'name': process.name, 'group': process.group }) }}" >{{ "logs.delete"|trans }}</a></li>
                                 </ul>
                             </div>
                         </td>
@@ -107,7 +107,7 @@
                             {% set processInfos = process.processInfo %}
                             <tr class="{% if processInfos.state == 10 or  processInfos.state == 20 %}success{% else %}danger{% endif %} process" data-select data-name="{{ process.name }}" data-group="{{ process.group }}" data-started="{% if processInfos.state == 10 or  processInfos.state == 20 %}true{% else %}false{% endif %}">
                                 <td class="col-lg-2">
-                                    <span class="label label-{% if processInfos.state == 10 or processInfos.state == 20 %}success{% else %}danger{% endif %} process-statename">{{ processInfos.statename }}</span>
+                                    <span class="badge badge-{% if processInfos.state == 10 or processInfos.state == 20 %}success{% else %}danger{% endif %} process-statename">{{ processInfos.statename }}</span>
                                 </td>
                                 <td class="col-lg-6">
                                     <strong class="process-name">{{ processInfos.name }}</strong><br />
@@ -125,9 +125,9 @@
                                     <div class="btn-group form-select btn-small btn-default">
                                         <a href="{{ path('supervisor.process.info', { 'key':supervisor.key, 'name':process.name, 'group':process.group }) }}" class="fancybox_preview fancybox.iframe btn btn-default btn-small process-info {{ process.group }}">{{ "information"|trans }}</a>
                                         <button data-toggle="dropdown" class="btn btn-default btn-small dropdown-toggle"><span class="caret"></span></button>
-                                        <ul class="dropdown-menu align-left">
-                                            <li><a href="{{ path('supervisor.process.log', { 'key':supervisor.key, 'name':process.name, 'group':process.group }) }}" class="fancybox_preview fancybox.iframe">{{ "open.stdout"|trans }}</a></li>
-                                            <li><a href="{{ path('supervisor.process.error', { 'key':supervisor.key, 'name':process.name, 'group':process.group }) }}" class="fancybox_preview fancybox.iframe">{{ "open.stderr"|trans }}</a></li>
+                                        <ul class="dropdown-menu align-left btn btn-small btn-default">
+                                            <li><a href="{{ path('supervisor.process.log', { 'key':supervisor.key, 'name':process.name, 'group':process.group }) }}">{{ "open.stdout"|trans }}</a></li>
+                                            <li><a href="{{ path('supervisor.process.error', { 'key':supervisor.key, 'name':process.name, 'group':process.group }) }}">{{ "open.stderr"|trans }}</a></li>
                                             <li class="divider"></li>
                                             <li><a href="{{ path('supervisor.process.log.clear', { 'key': supervisor.key, 'name': process.name, 'group': process.group }) }}">{{ "logs.delete"|trans }}</a></li>
                                         </ul>
