@@ -50,7 +50,7 @@ class SupervisorController extends Controller
         }
 
         return $this->render('@YZSupervisor/Supervisor/list.html.twig', array(
-            'supervisors' => $supervisorManager->getSupervisors(),
+            'supervisors' => $supervisorSupervisors,
             'groups' => array_unique($processGroups),
         ));
     }
