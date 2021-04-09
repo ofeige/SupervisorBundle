@@ -174,12 +174,15 @@
             })
             var defaultView = $('.defaultView')
             var selectedView = $('.selectedView')
+            var selectedOption = $('.selectedOption')
             if(selected != "undefined") {
                 defaultView.css("display", "none")
                 selectedView.css("display", "inline")
+                selectedOption.removeClass('col-lg-6').addClass('col-lg-12')
             } else {
                 defaultView.css("display", "inline")
                 selectedView.css("display", "none")
+                selectedOption.removeClass('col-lg-12').addClass('col-lg-6')
             }
         }
     });
