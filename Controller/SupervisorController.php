@@ -2,7 +2,7 @@
 
 namespace YZ\SupervisorBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -11,7 +11,7 @@ use YZ\SupervisorBundle\Manager\SupervisorManager;
 /**
  * SupervisorController
  */
-class SupervisorController extends AbstractController
+class SupervisorController extends Controller
 {
     private static $publicInformations = ['description', 'group', 'name', 'state', 'statename'];
 
@@ -29,8 +29,29 @@ class SupervisorController extends AbstractController
      */
     public function indexAction()
     {
+        $uniqueSupervisors = [];
+        $processGroups = [];
+        $supervisorProcesses = [];
+
+        $supervisorManager = $this->supervisorManager;
+        $supervisorSupervisors = $supervisorManager->getSupervisors();
+        $supervisorKeys = array_keys($supervisorSupervisors);
+
+        foreach ($supervisorKeys as $value) {
+            $uniqueSupervisors[] = $supervisorSupervisors[$value]->getProcesses();
+        }
+
+        foreach ($uniqueSupervisors as $value) {
+            $supervisorProcesses = array_merge($supervisorProcesses, $value);
+        }
+
+        foreach ($supervisorProcesses as $value) {
+            $processGroups[] = $value->getGroup();
+        }
+
         return $this->render('@YZSupervisor/Supervisor/list.html.twig', array(
-            'supervisors' => $this->supervisorManager->getSupervisors(),
+            'supervisors' => $supervisorSupervisors,
+            'groups' => array_unique($processGroups),
         ));
     }
 
@@ -43,7 +64,7 @@ class SupervisorController extends AbstractController
      * @param string  $group The group of a process
      * @param Request $request
      *
-     * @return Response
+     * @return Symfony\Component\HttpFoundation\Response represents an HTTP response.
      * @throws \Exception
      */
     public function startStopProcessAction($start, $key, $name, $group, Request $request)
@@ -67,10 +88,6 @@ class SupervisorController extends AbstractController
 
         } catch (\Exception $e) {
             $success = false;
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                $this->translator->trans('process.stop.error', array(), 'YZSupervisorBundle')
-            );
         }
 
         if (!$success) {
@@ -107,7 +124,7 @@ class SupervisorController extends AbstractController
      * @param Request $request
      * @param string $start 1 to start, 0 to stop it
      * @param string $key The key to retrieve a Supervisor object
-     * @return Response
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      * @throws \Exception
      */
     public function startStopAllProcessesAction(Request $request, $start, $key)
@@ -143,12 +160,11 @@ class SupervisorController extends AbstractController
      * showSupervisorLogAction
      *
      * @param string $key The key to retrieve a Supervisor object
-     * @return Response
-     * @throws \Exception
      */
     public function showSupervisorLogAction($key)
     {
-        $supervisor = $this->supervisorManager->getSupervisorByKey($key);
+        $supervisorManager = $this->supervisorManager;
+        $supervisor = $supervisorManager->getSupervisorByKey($key);
 
         if (!$supervisor) {
             throw new \Exception('Supervisor not found');
@@ -165,12 +181,11 @@ class SupervisorController extends AbstractController
      * clearSupervisorLogAction
      *
      * @param string $key The key to retrieve a Supervisor object
-     * @return Response
-     * @throws \Exception
      */
     public function clearSupervisorLogAction($key)
     {
-        $supervisor = $this->supervisorManager->getSupervisorByKey($key);
+        $supervisorManager = $this->supervisorManager;
+        $supervisor = $supervisorManager->getSupervisorByKey($key);
 
         if (!$supervisor) {
             throw new \Exception('Supervisor not found');
@@ -192,12 +207,11 @@ class SupervisorController extends AbstractController
      * @param string $key   The key to retrieve a Supervisor object
      * @param string $name  The name of a process
      * @param string $group The group of a process
-     * @return Response
-     * @throws \Exception
      */
     public function showProcessLogAction($key, $name, $group)
     {
-        $supervisor = $this->supervisorManager->getSupervisorByKey($key);
+        $supervisorManager = $this->supervisorManager;
+        $supervisor = $supervisorManager->getSupervisorByKey($key);
         $process = $supervisor->getProcessByNameAndGroup($name, $group);
 
         if (!$supervisor) {
@@ -218,12 +232,11 @@ class SupervisorController extends AbstractController
      * @param string $key   The key to retrieve a Supervisor object
      * @param string $name  The name of a process
      * @param string $group The group of a process
-     * @return Response
-     * @throws \Exception
      */
     public function showProcessLogErrAction($key, $name, $group)
     {
-        $supervisor = $this->supervisorManager->getSupervisorByKey($key);
+        $supervisorManager = $this->supervisorManager;
+        $supervisor = $supervisorManager->getSupervisorByKey($key);
         $process = $supervisor->getProcessByNameAndGroup($name, $group);
 
         if (!$supervisor) {
@@ -244,12 +257,11 @@ class SupervisorController extends AbstractController
      * @param string $key   The key to retrieve a Supervisor object
      * @param string $name  The name of a process
      * @param string $group The group of a process
-     * @return Response
-     * @throws \Exception
      */
     public function clearProcessLogAction($key, $name, $group)
     {
-        $supervisor = $this->supervisorManager->getSupervisorByKey($key);
+        $supervisorManager = $this->supervisorManager;
+        $supervisor = $supervisorManager->getSupervisorByKey($key);
         $process = $supervisor->getProcessByNameAndGroup($name, $group);
 
         if (!$supervisor) {
@@ -274,12 +286,13 @@ class SupervisorController extends AbstractController
      * @param string  $group The group of a process
      * @param Request $request
      *
-     * @return Response
+     * @return Symfony\Component\HttpFoundation\Response represents an HTTP response.
      * @throws \Exception
      */
     public function showProcessInfoAction($key, $name, $group, Request $request)
     {
-        $supervisor = $this->supervisorManager->getSupervisorByKey($key);
+        $supervisorManager = $this->supervisorManager;
+        $supervisor = $supervisorManager->getSupervisorByKey($key);
         $process = $supervisor->getProcessByNameAndGroup($name, $group);
 
         if (!$supervisor) {
@@ -322,7 +335,7 @@ class SupervisorController extends AbstractController
      * @param string  $key The key to retrieve a Supervisor object
      * @param Request $request
      *
-     * @return Response
+     * @return Symfony\Component\HttpFoundation\Response represents an HTTP response.
      * @throws \Exception
      */
     public function showProcessInfoAllAction($key, Request $request)
@@ -331,7 +344,8 @@ class SupervisorController extends AbstractController
             throw new \Exception('Ajax request expected here');
         }
 
-        $supervisor = $this->supervisorManager->getSupervisorByKey($key);
+        $supervisorManager = $this->supervisorManager;
+        $supervisor = $supervisorManager->getSupervisorByKey($key);
 
         if (!$supervisor) {
             throw new \Exception('Supervisor not found');
@@ -364,5 +378,89 @@ class SupervisorController extends AbstractController
             'Content-Type' => 'application/json',
             'Cache-Control' => 'no-store',
         ]);
+    }
+
+    /**
+     * startStopGroupProcesses
+     *
+     * @param string  $start 1 to start, 0 to stop it
+     * @param string  $group The group of a process
+     * @param Request $request
+     *
+     * @return Symfony\Component\HttpFoundation\Response represents an HTTP response.
+     * @throws \Exception
+     */
+    public function startStopGroupProcess($group, $start, Request $request)
+    {
+        $supervisorProcesses = [];
+
+        $supervisorManager = $this->supervisorManager;
+        $supervisorKeys = array_keys($supervisorManager->getSupervisors());
+
+        foreach ($supervisorKeys as $value) {
+            $supervisorProcesses[] = $supervisorManager->getSupervisors()[$value]->getProcesses();
+        }
+
+        $selectedProcesses = [];
+
+        foreach ($supervisorProcesses as $value) {
+            foreach ($value as $subValue) {
+                $selectedGroup = $subValue->getGroup();
+                if ($selectedGroup === $group) {
+                    $selectedProcesses[] = $subValue;
+                }
+            }
+        }
+
+        if (!$supervisorManager) {
+            throw new \Exception('Supervisor not found');
+        }
+
+        $success = true;
+        try {
+            foreach ($selectedProcesses as $value) {
+                if ($start == "1") {
+                    $success &= $value->startProcess();
+                } elseif ($start == "0") {
+                    $success &= $value->stopProcess();
+                } else {
+                    $success = false;
+                }
+            }
+
+        } catch (\Exception $e) {
+            $success = false;
+        }
+
+        if (!$success) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                $this->translator->trans(
+                    ($start == "1" ? 'process.start.error' : 'process.stop.error'),
+                    array(),
+                    'YZSupervisorBundle'
+                )
+            );
+        }
+
+        $processInfo = [];
+
+        if ($request->isXmlHttpRequest()) {
+            foreach ($selectedProcesses as $value) {
+                $processInfo[] = $value->getProcessInfo();
+            }
+            $res = json_encode([
+                'success'       => $success,
+                'message'       => implode(', ', $this->get('session')->getFlashBag()->get('error', array())),
+                'processInfo'   => $processInfo
+            ]);
+
+            return new Response($res, 200, [
+                'Content-Type' => 'application/json',
+                'Cache-Control' => 'no-store',
+            ]);
+        }
+
+        return $this->redirect($this->generateUrl('supervisor'));
     }
 }

@@ -22,7 +22,7 @@
             var started = process.data('started');
 
             process.data('control', false).removeClass('success danger').addClass('warning');
-            $('.process-statename', process).text(started ? '{{ "stopping"|trans }}' : '{{ "starting"|trans }}').removeClass('label-success label-danger').addClass('label-warning');
+            $('.process-statename', process).text(started ? '{{ "stopping"|trans }}' : '{{ "starting"|trans }}').removeClass('badge-success badge-danger').addClass('badge-warning');
             $this.addClass('disabled');
 
             $.get($this.attr('href'), function (r) {
@@ -58,7 +58,7 @@
             var stopping = $this.hasClass('stop');
 
             processes.data('control', false).removeClass('success danger').addClass('warning');
-            $('.process-statename', processes).text(stopping ? '{{ "stopping"|trans }}' : '{{ "starting"|trans }}').removeClass('label-success label-danger').addClass('label-warning');
+            $('.process-statename', processes).text(stopping ? '{{ "stopping"|trans }}' : '{{ "starting"|trans }}').removeClass('badge-success badge-danger').addClass('badge-warning');
             $this.addClass('disabled');
 
             $.get($this.attr('href'), function (r) {
@@ -99,10 +99,91 @@
         // update display and data
         function display(process, response) {
             var started = response.processInfo.state == 10 || response.processInfo.state == 20;
-            $('.process-statename', process).text(response.processInfo.statename).removeClass('label-success label-danger label-warning').addClass(started ? 'label-success' : 'label-danger');
+            $('.process-statename', process).text(response.processInfo.statename).removeClass('badge-success badge-danger badge-warning').addClass(started ? 'badge-success' : 'badge-danger');
             $('.process-control a', process).text(started ? '{{ "stop"|trans }}' : '{{ "start"|trans }}').removeClass('btn-success btn-danger disabled').addClass(started ? 'btn-danger' : 'btn-success').attr('href', response.controlLink);
             $('.process-description', process).text(response.processInfo.description);
             process.data('control', true).data('started', started).removeClass('success danger warning').addClass(started ? 'success' : 'danger');
+        }
+
+        // function to update href
+        function dropdownSelect(e, element) {
+            var selected = element[0].value
+            var href = $('.confirm-group > a')
+            href.each(function(index, e) {
+                var currentHref = e['href'];
+                var lastIndex = currentHref.lastIndexOf('/')+1;
+                var newHref = currentHref.substr(0, lastIndex) + selected;
+                $(e).attr('data-group', selected)
+                $(e).attr('href', newHref)
+            })
+        }
+
+        // update href to correct form on Refresh
+        $(function(e) {
+            var element = $('.group-select')
+            dropdownSelect(e, element)
+        })
+
+        // dropdownselect on Change
+        $('.group-select').change(function(e) {
+            e.preventDefault()
+            dropdownSelect(e, $(this))
+            renderSelected(e, $(this))
+        })
+
+        $('.confirm-group > a').click(function(e) {
+            e.preventDefault()
+            var $this = $(this)
+            var currentGroup = $(this).attr('data-group')
+            var groupName = $("[data-group="+ currentGroup +"]").not('.btn-small')
+            var started = groupName.data('started');
+
+            groupName.removeClass('success danger').addClass('warning')
+            $('.process-statename', groupName).text(started ? '{{ "stopping"|trans }}' : '{{ "starting"|trans }}').removeClass('badge-success badge-danger').addClass('badge-warning');
+            $this.addClass('disabled');
+
+            $.get($this.attr('href'), function (r) {
+                if (!r.success) {
+                    $this.tooltip({
+                        title: r.message,
+                        trigger: 'manual',
+                        container: 'body',
+                        placement: 'left'
+                    }).tooltip('show');
+                    setTimeout(function () {
+                        $this.tooltip('hide');
+                    }, 2000);
+                }
+                setTimeout(function() {
+                    update(groupName);
+                    $this.removeClass('disabled');
+                }, 1200);
+            });
+        })
+
+        //render selected Group
+        function renderSelected(e, element) {
+            var selected = element[0].value
+            var option = $('.selected')
+            option.each(function(index, e) {
+                if(e.getAttribute("data-group") != selected) {
+                    $(e).css("display", "none")
+                } else {
+                    $(e).css("display", "table-row")
+                }
+            })
+            var defaultView = $('.defaultView')
+            var selectedView = $('.selectedView')
+            var selectedOption = $('.selectedOption')
+            if(selected != "undefined") {
+                defaultView.css("display", "none")
+                selectedView.css("display", "inline")
+                selectedOption.removeClass('col-lg-6').addClass('col-lg-12')
+            } else {
+                defaultView.css("display", "inline")
+                selectedView.css("display", "none")
+                selectedOption.removeClass('col-lg-12').addClass('col-lg-6')
+            }
         }
     });
 </script>
