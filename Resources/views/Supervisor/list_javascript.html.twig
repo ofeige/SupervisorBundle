@@ -176,11 +176,21 @@
             var selectedView = $('.selectedView')
             if(selected != "undefined") {
                 defaultView.css("display", "none")
-                selectedView.css("display", "inline")
+                selectedView.css("display", "block")
             } else {
-                defaultView.css("display", "inline")
+                defaultView.css("display", "block")
                 selectedView.css("display", "none")
             }
         }
+
+        $('#startStop').change(function(e) {
+            e.preventDefault();
+            var active = $('#startStop option:checked').val();
+            if(active != "undefined") {
+                $('#startStop').addClass('btn-primary')
+            } else {
+                $('#startStop').removeClass('btn-primary')
+            }
+        })
     });
 </script>

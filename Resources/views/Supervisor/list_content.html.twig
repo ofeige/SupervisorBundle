@@ -11,7 +11,7 @@
                     </li>
                 {% endfor %}
             </ul>
-            <select class="form-select btn btn-default group-select" aria-badge="Default select example" id="startStop" name="startStop">
+            <select class="btn btn-default group-select mr-2" aria-badge="Default select example" id="startStop" name="startStop">
                 <option selected value="undefined">no groupfilter</option>
                 {% for group in groups %}
                     {% set selectedGroup = group %}
@@ -96,7 +96,7 @@
 
 {# selectedView #}
 <div class="col-lg-12 selectedView tab-content pt-2" role="tabpanel" style="display: none">
-    <div class="row d-flex">
+    <div class="row">
         <div class="col-sm text-right pb-3">
             <div class="btn-group confirm-group" role="group">
                 <a class="btn-small btn-danger btn" data-group='#' href="{{ path("supervisor.groupProcesses.startStop", {'group': '#', 'start': 0}) }}" data-loading-text="{{ "loading"|trans }}" data-text="{{ "stop.all"|trans }}">{{ "stop.all"|trans }}</a>
@@ -105,7 +105,7 @@
         </div>
     </div>
     {% for supervisor in supervisors %}
-        <div class="row d-flex pt-5">
+        <div class="row d-flex">
             <div class="col-sm">
                 <h1>{{ supervisor.name }}</h1>
             </div>
@@ -145,7 +145,7 @@
                         {% endif %}
                     </div>
                     <div class="btn-group">
-                        <a href="{{ path('supervisor.process.info', { 'key':supervisor.key, 'name':process.name, 'group':process.group }) }}" class="fancybox_preview fancybox.iframe btn btn-default btn-small process-info {{ process.group }}">{{ "information"|trans }}</a>
+                        <a href="{{ path('supervisor.process.info', { 'key':supervisor.key, 'name':process.name, 'group':process.group }) }}" data-toggle="modal" data-target="#exampleModal" class="fancybox_preview fancybox.iframe btn btn-default btn-small process-info {{ process.group }}">{{ "information"|trans }}</a>
                         <button data-toggle="dropdown" class="btn btn-default btn-small dropdown-toggle"><span class="caret"></span></button>
                         <ul class="dropdown-menu align-left">
                             <li><a href="{{ path('supervisor.process.log', { 'key':supervisor.key, 'name':process.name, 'group':process.group }) }}" class="fancybox_preview fancybox.iframe">{{ "open.stdout"|trans }}</a></li>
@@ -157,5 +157,26 @@
                 </div>
             </div>
         {% endfor %}
+        <hr>
     {% endfor %}
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Modal body text goes here.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
 </div>
