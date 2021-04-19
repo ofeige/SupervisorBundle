@@ -45,4 +45,15 @@
     <route id="supervisor.process.info" path="/{key}/show-process-info/{name}/{group}/">
         <default key="_controller">YZ\SupervisorBundle\Controller\SupervisorController::showProcessInfoAction</default>
     </route>
+
+    <route id="supervisor.groupProcesses.startStop" path="/start-stop-group-processes/{start}/{group}">
+        <default key="_controller">YZ\SupervisorBundle\Controller\SupervisorController::startStopGroupProcess</default>
+        <requirement key="start">0|1</requirement>
+    </route>
+
+    <route id="supervisor.groupProcessSelected.startStop" path="/start-stop-group-processes/{start}/{group}/{name}">
+        <default key="_controller">YZ\SupervisorBundle\Controller\SupervisorController::startStopProcessSelected</default>
+        <requirement key="start">0|1</requirement>
+    </route>
 </routes>
+
