@@ -166,10 +166,11 @@
             var selected = element[0].value
             var option = $('.selected')
             option.each(function(index, e) {
+                console.log($(e).parent())
                 if(e.getAttribute("data-group") != selected) {
-                    $(e).css("display", "none")
+                    $(e).parent().css("display", "none")
                 } else {
-                    $(e).css("display", "table-row")
+                    $(e).parent().css("display", "flex")
                 }
             })
             var defaultView = $('.defaultView')

@@ -22,13 +22,12 @@
         </div>
 </nav>
 
-
 {# defaultView #}
 <div class="col-lg-12 pt-2 defaultView tab-content" role="tabpanel">
         {% for supervisor in supervisors %}
             <div class="tab-pane{{ loop.index == 1 ? ' active' : '' }} supervisor" id="{{ supervisor.name }}" aria-labelledby="{{ supervisor.name }}-tab" role="tabpanel" data-supervisor="{{ supervisor.key }}" data-refresh-url="{{ path('supervisor.processes.info', { 'key':supervisor.key }) }}">
                 {% if supervisor.checkConnection == true %}
-                <div class="row d-flex">
+                <div class="row">
                     <div class="col-sm">
                         <p>{{ "version.supervisor"|trans }} <code>{{ supervisor.getSupervisorVersion }}</code></p>
                         <p>{{ "version.api"|trans }} <code>{{ supervisor.getAPIVersion }}</code></p>
@@ -45,7 +44,7 @@
                     </div>
                 </div>
             <div>
-                    <div class="row d-flex pb-3">
+                    <div class="row pb-3">
                         <div class="col-sm">
                             <h3>{{ "header.status"|trans }}</h3>
                         </div>
@@ -58,7 +57,7 @@
                     </div>
                 {% for process in supervisor.processes %}
                 {% set processInfos = process.processInfo %}
-                    <div class="row d-flex pb-2 pt-2">
+                    <div class="row pb-2 pt-2">
                         <p class="{% if processInfos.state == 10 or  processInfos.state == 20 %}success{% else %}danger{% endif %} process" data-select data-name="{{ process.name }}" data-group="{{ process.group }}" data-started="{% if processInfos.state == 10 or  processInfos.state == 20 %}true{% else %}false{% endif %}">
                         <div class="col-sm">
                             <span class="badge badge-{% if processInfos.state == 10 or processInfos.state == 20 %}success{% else %}danger{% endif %} process-statename">{{ processInfos.statename }}</span>
@@ -105,7 +104,7 @@
         </div>
     </div>
     {% for supervisor in supervisors %}
-        <div class="row d-flex">
+        <div class="row">
             <div class="col-sm">
                 <h1>{{ supervisor.name }}</h1>
             </div>
@@ -114,7 +113,7 @@
                 <p>{{ "version.api"|trans }} <code>{{ supervisor.getAPIVersion }}</code></p>
             </div>
         </div>
-        <div class="row d-flex pb-3">
+        <div class="row pb-3">
             <div class="col-sm">
                 <h3>{{ "header.status"|trans }}</h3>
             </div>
@@ -127,8 +126,8 @@
         </div>
         {% for process in supervisor.processes %}
             {% set processInfos = process.processInfo %}
-            <div class="row d-flex pb-2 pt-2">
-                <p class="{% if processInfos.state == 10 or  processInfos.state == 20 %}success{% else %}danger{% endif %} process" data-select data-name="{{ process.name }}" data-group="{{ process.group }}" data-started="{% if processInfos.state == 10 or  processInfos.state == 20 %}true{% else %}false{% endif %}">
+            <div class="row pb-2 pt-2">
+                <p class="{% if processInfos.state == 10 or  processInfos.state == 20 %}success{% else %}danger{% endif %} process selected" data-select data-name="{{ process.name }}" data-group="{{ process.group }}" data-started="{% if processInfos.state == 10 or  processInfos.state == 20 %}true{% else %}false{% endif %}">
                 <div class="col-sm">
                     <span class="badge badge-{% if processInfos.state == 10 or processInfos.state == 20 %}success{% else %}danger{% endif %} process-statename">{{ processInfos.statename }}</span>
                 </div>
