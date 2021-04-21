@@ -128,6 +128,12 @@
             e.preventDefault()
             dropdownSelect(e, $(this))
             renderSelected(e, $(this))
+            var active = $('#startStop option:checked').val();
+            if(active != "undefined") {
+                $('#startStop').addClass('btn-primary')
+            } else {
+                $('#startStop').removeClass('btn-primary')
+            }
         })
 
         $('.confirm-group > a').click(function(e) {
@@ -169,6 +175,9 @@
                 if(e.getAttribute("data-group") != selected) {
                     $(e).css("display", "none")
                 }
+                if (selected == "undefined") {
+                    $(e).css("display", "flex")
+                }
             })
             var defaultView = $('.defaultView')
             var selectedView = $('.selectedView')
@@ -183,15 +192,5 @@
                 selectedView.css("display", "none")
             }
         }
-
-        $('#startStop').change(function(e) {
-            e.preventDefault();
-            var active = $('#startStop option:checked').val();
-            if(active != "undefined") {
-                $('#startStop').addClass('btn-primary')
-            } else {
-                $('#startStop').removeClass('btn-primary')
-            }
-        })
     });
 </script>
