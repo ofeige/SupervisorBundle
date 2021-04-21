@@ -57,8 +57,7 @@
                     </div>
                 {% for process in supervisor.processes %}
                 {% set processInfos = process.processInfo %}
-                    <div class="row pb-2 pt-2">
-                        <p class="{% if processInfos.state == 10 or  processInfos.state == 20 %}success{% else %}danger{% endif %} process" data-select data-name="{{ process.name }}" data-group="{{ process.group }}" data-started="{% if processInfos.state == 10 or  processInfos.state == 20 %}true{% else %}false{% endif %}">
+                    <div class="row pb-2 pt-2 {% if processInfos.state == 10 or  processInfos.state == 20 %}success{% else %}danger{% endif %} process selected" data-select data-name="{{ process.name }}" data-group="{{ process.group }}" data-started="{% if processInfos.state == 10 or  processInfos.state == 20 %}true{% else %}false{% endif %}">
                         <div class="col-sm">
                             <span class="badge badge-{% if processInfos.state == 10 or processInfos.state == 20 %}success{% else %}danger{% endif %} process-statename">{{ processInfos.statename }}</span>
                         </div>
@@ -126,8 +125,7 @@
         </div>
         {% for process in supervisor.processes %}
             {% set processInfos = process.processInfo %}
-            <div class="row pb-2 pt-2">
-                <p class="{% if processInfos.state == 10 or  processInfos.state == 20 %}success{% else %}danger{% endif %} process selected" data-select data-name="{{ process.name }}" data-group="{{ process.group }}" data-started="{% if processInfos.state == 10 or  processInfos.state == 20 %}true{% else %}false{% endif %}">
+            <div class="row pb-2 pt-2 {% if processInfos.state == 10 or  processInfos.state == 20 %}success{% else %}danger{% endif %} process selected" data-select data-name="{{ process.name }}" data-group="{{ process.group }}" data-started="{% if processInfos.state == 10 or  processInfos.state == 20 %}true{% else %}false{% endif %}">
                 <div class="col-sm">
                     <span class="badge badge-{% if processInfos.state == 10 or processInfos.state == 20 %}success{% else %}danger{% endif %} process-statename">{{ processInfos.statename }}</span>
                 </div>
