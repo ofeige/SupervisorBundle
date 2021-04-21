@@ -173,11 +173,14 @@
             })
             var defaultView = $('.defaultView')
             var selectedView = $('.selectedView')
+            var processView = $('.processView')
             if(selected != "undefined") {
                 defaultView.css("display", "none")
+                processView.css("display", "none")
                 selectedView.css("display", "block")
             } else {
                 defaultView.css("display", "block")
+                processView.css("display", "block")
                 selectedView.css("display", "none")
             }
         }

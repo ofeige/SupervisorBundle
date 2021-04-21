@@ -23,7 +23,7 @@
 </nav>
 
 {# defaultView #}
-<div class="col-lg-12 pt-2 defaultView tab-content" role="tabpanel">
+<div class="col-lg-12 pt-2 tab-content defaultView" role="tabpanel">
         {% for supervisor in supervisors %}
             <div class="tab-pane{{ loop.index == 1 ? ' active' : '' }} supervisor" id="{{ supervisor.name }}" aria-labelledby="{{ supervisor.name }}-tab" role="tabpanel" data-supervisor="{{ supervisor.key }}" data-refresh-url="{{ path('supervisor.processes.info', { 'key':supervisor.key }) }}">
                 {% if supervisor.checkConnection == true %}
@@ -43,7 +43,7 @@
                         </div>
                     </div>
                 </div>
-            <div>
+            <div class="processView">
                     <div class="row pb-3">
                         <div class="col-sm">
                             <h3>{{ "header.status"|trans }}</h3>
@@ -93,7 +93,7 @@
 </div>
 
 {# selectedView #}
-<div class="col-lg-12 selectedView tab-content pt-2" role="tabpanel" style="display: none">
+<div class="col-lg-12 tab-content pt-2 selectedView" role="tabpanel" style="display: none">
     <div class="row">
         <div class="col-sm text-right pb-3">
             <div class="btn-group confirm-group" role="group">
