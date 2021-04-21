@@ -69,9 +69,9 @@
                         <div class="col-sm text-right">
                             <div class="btn-group process-control">
                                 {% if processInfos.state == 10 or  processInfos.state == 20 %}
-                                    <a href="{{ path('supervisor.process.startStop', { 'key':supervisor.key, 'name':process.name, 'group':process.group, 'start': 0 }) }}" class="btn btn-danger btn-small">{{ "stop"|trans }}</a>
+                                    <a href="{{ path('supervisor.process.startStop', { 'key':supervisor.key, 'name':process.name, 'group':process.group, 'start': 0 }) }}" data-group="{{ process.group }}" class="btn btn-danger btn-small">{{ "stop"|trans }}</a>
                                 {% else %}
-                                    <a href="{{ path('supervisor.process.startStop', { 'key':supervisor.key, 'name':process.name, 'group':process.group, 'start': 1 }) }}" class="btn btn-success btn-small">{{ "start"|trans }}</a>
+                                    <a href="{{ path('supervisor.process.startStop', { 'key':supervisor.key, 'name':process.name, 'group':process.group, 'start': 1 }) }}" data-group="{{ process.group }}" class="btn btn-success btn-small">{{ "start"|trans }}</a>
                                 {% endif %}
                             </div>
                             <div class="btn-group">
@@ -138,9 +138,9 @@
                 <div class="col-sm text-right">
                     <div class="btn-group process-control">
                         {% if processInfos.state == 10 or  processInfos.state == 20 %}
-                            <a href="{{ path('supervisor.process.startStop', { 'key':supervisor.key, 'name':process.name, 'group':process.group, 'start': 0 }) }}" class="btn btn-danger btn-small">{{ "stop"|trans }}</a>
+                            <a href="{{ path('supervisor.process.startStop', { 'key':supervisor.key, 'name':process.name, 'group':process.group, 'start': 0 }) }}" data-group="{{ process.group }}" class="btn btn-danger btn-small">{{ "stop"|trans }}</a>
                         {% else %}
-                            <a href="{{ path('supervisor.process.startStop', { 'key':supervisor.key, 'name':process.name, 'group':process.group, 'start': 1 }) }}" class="btn btn-success btn-small">{{ "start"|trans }}</a>
+                            <a href="{{ path('supervisor.process.startStop', { 'key':supervisor.key, 'name':process.name, 'group':process.group, 'start': 1 }) }}" data-group="{{ process.group }}" class="btn btn-success btn-small">{{ "start"|trans }}</a>
                         {% endif %}
                     </div>
                     <div class="btn-group">

@@ -9,6 +9,7 @@
             updateAll();
         });
 
+        debugger;
         // use ajax to start/stop process. wait 1,2 sec then refresh row
         $('.process-control > a').click(function (e){
             e.preventDefault();
@@ -74,7 +75,6 @@
             var refreshBtn = $('#refresh-all-process');
             refreshBtn.attr('disabled', true).text(refreshBtn.data('loading-text'));
             var url = $('.supervisor.active').data('refresh-url');
-
             $.get(url, function (r) {
                 for(var name in r) {
                     var el = $('.supervisor[data-supervisor="'+r[name].supervisor+'"] .process[data-name="'+name+'"]');
@@ -166,7 +166,6 @@
             var selected = element[0].value
             var option = $('.selected')
             option.each(function(index, e) {
-                console.log($(e).parent())
                 if(e.getAttribute("data-group") != selected) {
                     $(e).parent().css("display", "none")
                 } else {
